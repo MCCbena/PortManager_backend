@@ -4,6 +4,7 @@
 #include "DatabaseUtil.h"
 
 #define node "oracle1"
+#define NIC "ens3"
 
 struct PortInfo{
     char* ipaddress;
@@ -24,10 +25,14 @@ int main(void) {
     MYSQL *conn = getConnection();
     port_infos = calloc(24, 128);
     while (1) {
-        refresh(conn);
-        sleep(1);
+        if(conn!=NULL) {
+            refresh(conn);
+            sleep(1);
+        } else{
+            printf("接続エラー\n");
+            return 0;
+        }
     }
-    return 0;
 }
 
 int refresh(MYSQL *conn){
@@ -76,6 +81,12 @@ int refresh(MYSQL *conn){
         if(!is_equal) {
             printf("削除:IP:%s, ポート:%d, プロトコル:%s\n", port_infos[i0].ipaddress, port_infos[i0].port,
                    port_infos[i0].protocol);
+            char *ip_command = calloc(256, 1);
+            sprintf(ip_command,
+                    "iptables -t nat -D PREROUTING -i %s -p %s --dport %d -j DNAT --to-destination %s;",
+                    NIC, port_infos[i0].protocol, port_infos[i0].port, port_infos[i0].ipaddress);
+            if(system(ip_command)==-1) printf("コマンドの実行に失敗しました。%s\n", ip_command);
+            free(ip_command);
             //配列からポートを削除してfree
             destroy_port_info(&port_infos[i0]);
             port_infos[i0].ipaddress = NULL;
@@ -99,8 +110,14 @@ int refresh(MYSQL *conn){
         if (!is_equal) {
             printf("作成:IP:%s, ポート:%d, プロトコル:%s\n", latest_port_info[i0].ipaddress, latest_port_info[i0].port,
                    latest_port_info[i0].protocol);
-            //配列の空いている部分を見つけて挿入
 
+            char *ip_command = calloc(256, 1);
+            sprintf(ip_command,
+                    "iptables -t nat -A PREROUTING -i %s -p %s --dport %d -j DNAT --to-destination %s;",
+                    NIC, latest_port_info[i0].protocol, latest_port_info[i0].port, latest_port_info[i0].ipaddress);
+            if(system(ip_command)==-1) printf("コマンドの実行に失敗しました。%s\n", ip_command);
+            free(ip_command);
+            //配列の空いている部分を見つけて挿入
             int input_array_index = -1;
             for (int i1 = 0; i1 < size; i1++) {
                 if (port_infos[i1].ipaddress == NULL) {
