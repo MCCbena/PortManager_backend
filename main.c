@@ -152,10 +152,6 @@ int refresh(MYSQL *conn){
     for(int i = 0; i < latest_port_array_size; i++){
         destroy_port_info(&latest_port_info[i]);
     }
-    for(int i = 0; i < latest_port_array_size; i++){
-        free(latest_port_info[i].ipaddress);
-        free(latest_port_info[i].protocol);
-    }
     free(latest_port_info);
 
     return error;
