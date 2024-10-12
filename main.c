@@ -26,13 +26,12 @@ int size = 0;
 
 int main(void) {
     printf("connecting...\n");
-    signal(SIGINT, portClose);
-    signal(SIGTERM, portClose);
 
     MYSQL *conn = getConnection();
     port_infos = calloc(24, 128);
     printf("done!\n");
     while (1) {
+        signal(SIGINT, portClose);
         if(conn!=NULL) {
             refresh(conn);
             sleep(1);
