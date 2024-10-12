@@ -2,6 +2,7 @@
 #include <string.h>
 #include <unistd.h>
 #include "DatabaseUtil.h"
+#include <signal.h>
 
 #define node "oracle1"
 #define NIC "ens3"
@@ -17,17 +18,25 @@ void destroy_port_info(struct PortInfo*);
 int port_info_equal(struct PortInfo, struct PortInfo);
 int refresh(MYSQL*);
 int byteSize(const char*);
+void portClose(int signal);
 
 struct PortInfo *port_infos;
+char stop_process = 0; //Ctrl+Cを押したらこれが1になる
 int size = 0;
 
 int main(void) {
+    printf("connecting...\n");
+    signal(SIGINT, portClose);
+    signal(SIGTERM, portClose);
+
     MYSQL *conn = getConnection();
     port_infos = calloc(24, 128);
+    printf("done!\n");
     while (1) {
         if(conn!=NULL) {
             refresh(conn);
             sleep(1);
+            if(stop_process) break;
         } else{
             printf("接続エラー\n");
             return 0;
@@ -97,7 +106,7 @@ int refresh(MYSQL *conn){
         }
     }
 
-    for(int i0 = 0; i0 < latest_port_array_size; i0++) {//作成されたルールをチェック
+    for(int i0 = 0; i0 < latest_port_array_size && !stop_process; i0++) {//作成されたルールをチェック
         char is_equal = 0;
         for (int i1 = 0; i1 < size; i1++) {
             if(port_infos[i1].ipaddress != NULL) {
@@ -143,6 +152,10 @@ int refresh(MYSQL *conn){
     for(int i = 0; i < latest_port_array_size; i++){
         destroy_port_info(&latest_port_info[i]);
     }
+    for(int i = 0; i < latest_port_array_size; i++){
+        free(latest_port_info[i].ipaddress);
+        free(latest_port_info[i].protocol);
+    }
     free(latest_port_info);
 
     return error;
@@ -167,9 +180,18 @@ int byteSize(const char* data){
 }
 
 /*
+ * port_info_equalの返り値が絶対に0になるようにし、登録されているフォワードルールをすべて消去します
+ */
+void portClose(int signal){
+    stop_process=1;
+}
+
+/*
  * イコールであるときは0、そうでないときは1を返します。
  */
 int port_info_equal(struct PortInfo portInfo0, struct PortInfo portInfo1){
+    if(stop_process) return 0;
+
     if(strcmp(portInfo0.ipaddress, portInfo1.ipaddress) == 0 &&
     portInfo0.port == portInfo1.port &&
             strcmp(portInfo0.protocol, portInfo1.protocol) == 0){
