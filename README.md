@@ -1,3 +1,5 @@
+0.apt install libmariadb-dev -y
+
 1.mkdir build
 
 2.cd build
