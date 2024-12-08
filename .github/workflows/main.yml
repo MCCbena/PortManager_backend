@@ -10,7 +10,8 @@ jobs:
           sudo apt install libmariadb-dev cmake -y
       - name: copy files
         run: |
-          cp -r ${{github.workspace}}/* ~/
+          ls -la ${{github.workspace}}
+          cp -r ${{github.workspace}} ~/
       - name: run cmake
         run: |
           mkdir build
