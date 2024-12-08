@@ -31,12 +31,13 @@ jobs:
           cd build
           make
           platform=${{matrix.platform}}
-          mv PortManager_backend PortManager_backend_${platform:6}
+          mv PortManager_backend ~/${platform:6}
+          ls -la ~/
       - name: upload file
         uses: actions/upload-artifact@v3
         with:
           name: upload-file
-          path: ~/build/PortManager_backend_*
+          path: ~/${{matrix.platform}}
   make-release:
     runs-on: ubuntu-latest
     needs: PortManager-Compile
