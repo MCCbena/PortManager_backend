@@ -2,7 +2,20 @@ name: PortManager Compiler
 run-name: PortManager backend compiling
 on: [push]
 jobs:
-  Explore-GitHub-Actions:
+  PortManager-Compile:
     runs-on: ubuntu-24.04
     steps:
-      - run: echo $(ls ${{ github.workspace }})
+      - name: install libraries
+        run: |
+          sudo apt install libmariadb-dev cmake -y
+      - name: copy files
+        run: |
+          cp -r ${{github.workspace}} ~/
+      - name: run cmake
+        run: |
+          mkdir build
+          cd build
+          cmake ..
+      - name: run make
+        run: |
+          make
