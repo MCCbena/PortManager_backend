@@ -32,7 +32,7 @@ jobs:
           cd build
           make
           
-          echo '::set-output name=result::${{matrix.runner}}-'($arch)
+          echo '::set-output name=result::${{matrix.runner}}-'$(arch)
 
       - name: upload file
         uses: actions/upload-artifact@v3
