@@ -3,7 +3,15 @@ run-name: PortManager backend compiling
 on: [push]
 jobs:
   PortManager-Compile:
-    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        include:
+          - platform: linux/amd64
+            runner: ubuntu-24.04
+          - platform: linux/arm64
+            runner: ubuntu-24.04
+
+    runs-on: ${{ matrix.runner }}
     steps:
       - name: install libraries
         run: |
