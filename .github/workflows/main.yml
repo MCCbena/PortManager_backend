@@ -31,15 +31,10 @@ jobs:
           cd build
           make
 
-      - name: download artifacts
-        uses: actions/download-artifact@v3
-
-      - run: ls
-
       - name: upload file
         uses: actions/upload-artifact@v3
         with:
-          name: upload-file
+          name: ${{matrix.runner}}-${{matrix.platform}}
           path: build/PortManager_backend
   make-release:
     runs-on: ubuntu-latest
