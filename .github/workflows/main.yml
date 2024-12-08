@@ -27,14 +27,17 @@ jobs:
           cd build
           cmake ..
       - name: run make
+        id: generate-file-name
         run: |
           cd build
           make
+          
+          echo '::set-output name=result::${{matrix.runner}}-$(arch)'
 
       - name: upload file
         uses: actions/upload-artifact@v3
         with:
-          name: ${{matrix.runner}}-${{matrix.platform}}
+          name: ${{steps.generate-file-name.outputs.result}}
           path: build/PortManager_backend
   make-release:
     runs-on: ubuntu-latest
