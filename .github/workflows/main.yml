@@ -34,7 +34,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: upload-file
-          path: ~/build/PortManager_backend
+          path: build/PortManager_backend
 
       - name: download artifacts
         uses: actions/download-artifact@v3
