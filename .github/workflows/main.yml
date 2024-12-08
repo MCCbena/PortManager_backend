@@ -8,10 +8,12 @@ jobs:
       - name: install libraries
         run: |
           sudo apt install libmariadb-dev cmake -y
+      - name: clone repository
+        uses: actions/checkout@v4
       - name: copy files
         run: |
           ls -la ${{github.workspace}}
-          cp -r ${{github.workspace}} ~/
+          cp -r ${{github.workspace}}/* ~/
       - name: run cmake
         run: |
           mkdir build
