@@ -32,7 +32,7 @@ jobs:
           make
           platform=${{matrix.platform}}
           mkdir ~/${platform::6}
-          mv PortManager_backend ~/${platform:6}
+          mv PortManager_backend ~/${platform}
           ls -la ~/linux
       - name: upload file
         uses: actions/upload-artifact@v3
