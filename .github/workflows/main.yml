@@ -5,4 +5,4 @@ jobs:
   Explore-GitHub-Actions:
     runs-on: ubuntu-24.04
     steps:
-      - run: ls ${{ github.workspace }}
+      - run: echo $(ls ${{ github.workspace }})
