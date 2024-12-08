@@ -1,0 +1,8 @@
+name: PortManager Compiler
+run-name: PortManager backend compiling
+on: [push]
+jobs:
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-24.04
+    steps:
+      - run: ls ${{ github.workspace }}
