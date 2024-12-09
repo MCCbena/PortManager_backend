@@ -56,17 +56,25 @@ jobs:
         id: release-tag
         run: |
           echo '::set-output name=result::'$(date +"%Y.%m.%d-%H.%M")
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1.0.1
         env:
-          GITHUB_TOKEN: ${{ secrets.TOKEN }} # This token is provided by Actions, you do not need to create your own token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ steps.release-tag.outputs.result }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
-          draft: false
-          prerelease: false
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./release_target.txt
+          asset_name: release_target.txt
+          asset_content_type: text/plain
+      - uses: actions/checkout@v4
+      - run: |
+          set -x
+          assets=()
+          for asset in ./*.md; do
+            assets+=("-a" "$asset")
+          done
+          tag_name="${GITHUB_REF##*/}"
+          hub release create "${assets[@]}" -m "$tag_name" "$tag_name"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
