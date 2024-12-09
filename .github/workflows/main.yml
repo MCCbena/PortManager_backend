@@ -49,4 +49,21 @@ jobs:
       - name: ls
         run: |
           ls -la
-
+      - name: Create tag
+        id: release-tag
+        run: |
+          echo '::set-output name=result::'$(date +"%Y.%m.%d"-%H:%M)
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+        with:
+          tag_name: ${{ steps.release-tag.outputs.result }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: false
+          prerelease: false
