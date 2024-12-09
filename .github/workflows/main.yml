@@ -15,7 +15,10 @@ jobs:
     steps:
       - name: install libraries
         run: |
+          sudo apt update
+          sudo apt upgrade -y
           sudo apt install libmariadb-dev cmake -y
+          sudo apt autoremove -y
       - name: clone repository
         uses: actions/checkout@v4
       - name: copy files
@@ -59,7 +62,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          tag_name: ${{ steps.release-tag.outputs.result }}
+          tag_name: test
           release_name: Release ${{ github.ref }}
           body: |
             Changes in this Release
