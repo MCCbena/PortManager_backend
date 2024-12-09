@@ -61,7 +61,6 @@ jobs:
         run: |
           echo '::set-output name=result::'$(date +"%Y.%m.%d-%H.%M")
 
-      - uses: actions/checkout@v4
       - run: |
           set -x
           assets=()
