@@ -46,6 +46,10 @@ jobs:
     runs-on: ubuntu-latest
     needs: PortManager-Compile
     steps:
+      - name: install hub
+        run: |
+          sudo add-apt-repository ppa:cpick/hub
+          sudo apt install hub -y
       - name: download artifacts
         uses: actions/download-artifact@v3
 
