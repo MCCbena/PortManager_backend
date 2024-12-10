@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include "DatabaseUtil.h"
 #include <signal.h>
 
@@ -29,12 +30,16 @@ int main(void) {
     MYSQL *conn = getConnection();
     port_infos = calloc(24, 128);
     printf("done!\n");
-    signal(SIGINT, portClose);
-    if(conn!=NULL) {
-        refresh(conn);
-    } else{
-        printf("接続エラー\n");
-        return 0;
+    while (1) {
+        signal(SIGINT, portClose);
+        if(conn!=NULL) {
+            refresh(conn);
+            sleep(1);
+            if(stop_process) break;
+        } else{
+            printf("接続エラー\n");
+            return 0;
+        }
     }
 }
 
