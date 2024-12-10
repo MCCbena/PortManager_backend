@@ -54,11 +54,13 @@ jobs:
         uses: actions/checkout@v4
 
       - name: download artifacts
+        id: download-atrifacts
         uses: actions/download-artifact@v3
       - name: ls
         run: |
           ls -la
           tree
+          echo "${{steps.download-atrifacts.outputs.download-path}}"
       - name: Create tag
         id: release-tag
         run: |
