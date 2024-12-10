@@ -57,6 +57,7 @@ jobs:
       - name: ls
         run: |
           ls -la
+          tree
       - name: Create tag
         id: release-tag
         run: |
