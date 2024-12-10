@@ -9,7 +9,9 @@ jobs:
           - platform: linux/amd64
             runner: ubuntu-24.04
           - platform: linux/arm64
-            runner: self-hosted
+            runner: debian12-arm64
+          - platform: windows/amd64
+            runner: windows-2022
 
     runs-on: ${{matrix.runner}}
     steps:
