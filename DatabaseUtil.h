@@ -23,9 +23,9 @@ MYSQL* getConnection(){
     MYSQL* conn = NULL;
     if(!(conn = mysql_init(0))) return NULL;
     if(!mysql_real_connect(conn,
-                          "192.168.30.18",
-                          "portmanager",
-                          "v.pizv(MYQb9(abKQzM_",
+                          "unknown",
+                          "unknown",
+                          "unknown",
                           "PORTS",
                           3306,
                           NULL,0))
