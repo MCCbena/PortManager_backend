@@ -60,7 +60,7 @@ jobs:
         run: |
           ls -la
           tree
-          echo "${{steps.download-atrifacts.outputs.download-path}}"
+          ls ${{steps.download-atrifacts.outputs.download-path}}
       - name: Create tag
         id: release-tag
         run: |
