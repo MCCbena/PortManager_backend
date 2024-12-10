@@ -67,8 +67,11 @@ jobs:
           echo '::set-output name=result::'$(date +"%Y.%m.%d-%H.%M")
 
       - run: |
-          mkdir temp
-          for i in $(ls | grep "PortManager_backend-"); do cp $i/PortManager_backend temp/$i; done;
-          gh release create ${{steps.release-tag.outputs.result}} $(ls temp)
+          files=""
+          for i in $(ls | grep "PortManager_backend-"); do 
+            mv $i/PortManager_backend $i/$i;
+            files+=" $i/$i";
+          done;
+          gh release create ${{steps.release-tag.outputs.result}} $files
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
