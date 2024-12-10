@@ -36,6 +36,7 @@ jobs:
           make
           
           echo '::set-output name=result::${{matrix.runner}}-'$(arch)
+          ls
 
       - name: upload file
         uses: actions/upload-artifact@v3
