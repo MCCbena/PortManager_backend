@@ -40,7 +40,7 @@ jobs:
       - name: upload file
         uses: actions/upload-artifact@v3
         with:
-          name: ${{steps.generate-file-name.outputs.result}}
+          name: PortManager_backend-${{steps.generate-file-name.outputs.result}}
           path: build/PortManager_backend
   make-release:
     runs-on: ubuntu-latest
@@ -49,9 +49,11 @@ jobs:
       - name: install gh
         run: |
           sudo apt install gh -y
+      - name: clone repository
+        uses: actions/checkout@v4
+
       - name: download artifacts
         uses: actions/download-artifact@v3
-
       - name: ls
         run: |
           ls -la
@@ -61,6 +63,6 @@ jobs:
           echo '::set-output name=result::'$(date +"%Y.%m.%d-%H.%M")
 
       - run: |
-          gh release create ${{steps.release-tag.outputs.result}} *
+          gh release create ${{steps.release-tag.outputs.result}} PortManager_backend-*
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
