@@ -34,7 +34,7 @@ jobs:
         run: |
           cd build
           make
-          
+    
           echo '::set-output name=result::${{matrix.runner}}-'$(arch)
           ls -la
 
