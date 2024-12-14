@@ -30,11 +30,11 @@ jobs:
           cd build
           cmake ..
       - name: run make
-        id: generate-file-name
+        id: generate-tag-name
         run: |
           cd build
           make
-          echo '::set-output name=result::${{matrix.runner}}-'$(arch)
+          echo '::set-output name=result::'$(arch)-latest
           ls -la
 
       - name: login ghcr.io
@@ -49,4 +49,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/mccbena/portmanagerbackend
+          tags: ghcr.io/mccbena/portmanagerbackend:${{steps.generate-tag-name.outputs.result}}
