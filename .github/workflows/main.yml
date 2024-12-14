@@ -17,7 +17,7 @@ jobs:
         run: |
           sudo apt update
           sudo apt upgrade -y
-          sudo apt install libmariadb-dev cmake docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+          sudo apt install libmariadb-dev cmake -y
           sudo apt autoremove -y
       - name: clone repository
         uses: actions/checkout@v4
@@ -34,7 +34,6 @@ jobs:
         run: |
           cd build
           make
-    
           echo '::set-output name=result::${{matrix.runner}}-'$(arch)
           ls -la
 
