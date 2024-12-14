@@ -15,7 +15,6 @@ jobs:
     steps:
       - name: install libraries
         run: |
-          who
           sudo apt update
           sudo apt upgrade -y
           sudo apt install libmariadb-dev cmake -y
