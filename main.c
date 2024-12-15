@@ -23,15 +23,20 @@ void portClose(int signal);
 struct PortInfo *port_infos;
 char stop_process = 0; //Ctrl+Cを押したらこれが1になる
 int size = 0;
+char* host;
+char* user;
+char* password;
+char* db;
+int port;
 
 int main(int argc, char *argv[]) {
     printf("connecting...\n");
 
-    char* host = argv[1];
-    char* user = argv[2];
-    char* password = argv[3];
-    char* db = argv[4];
-    int port = atoi(argv[5]);
+    host = argv[1];
+    user = argv[2];
+    password = argv[3];
+    db = argv[4];
+    port = atoi(argv[5]);
     NIC = argv[6];
     node = argv[7];
 
@@ -109,7 +114,11 @@ int refresh(MYSQL *conn){
             sprintf(ip_command,
                     "iptables -t nat -D PREROUTING -i %s -p %s --dport %d -j DNAT --to-destination %s;",
                     NIC, port_infos[i0].protocol, port_infos[i0].port, port_infos[i0].ipaddress);
-            if(system(ip_command)==-1) printf("コマンドの実行に失敗しました。%s\n", ip_command);
+            if(system(ip_command)==-1) {
+                printf("コマンドの実行に失敗しました。%s\n", ip_command);
+                mysql_close(conn);
+                conn = getConnection(host, user, password, db, port);
+            }
             free(ip_command);
             //配列からポートを削除してfree
             destroy_port_info(&port_infos[i0]);
@@ -139,7 +148,10 @@ int refresh(MYSQL *conn){
             sprintf(ip_command,
                     "iptables -t nat -A PREROUTING -i %s -p %s --dport %d -j DNAT --to-destination %s;",
                     NIC, latest_port_info[i0].protocol, latest_port_info[i0].port, latest_port_info[i0].ipaddress);
-            if(system(ip_command)==-1) printf("コマンドの実行に失敗しました。%s\n", ip_command);
+            if(system(ip_command)==-1){
+                printf("コマンドの実行に失敗しました。%s\n", ip_command);
+                mysql_close(conn);
+            }
             free(ip_command);
             //配列の空いている部分を見つけて挿入
             int input_array_index = -1;
