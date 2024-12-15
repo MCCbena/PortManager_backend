@@ -4,8 +4,8 @@
 #include "DatabaseUtil.h"
 #include <signal.h>
 
-#define node "oracle1"
-#define NIC "ens3"
+char* node = "oracle1";
+char* NIC = "ens3";
 
 struct PortInfo{
     char* ipaddress;
@@ -32,11 +32,13 @@ int main(int argc, char *argv[]) {
     char* password = argv[3];
     char* db = argv[4];
     int port = atoi(argv[5]);
+    NIC = argv[6];
+    node = argv[7];
 
     for(int i = 0; i < argc; i++){
         printf("%s\n", argv[i]);
     }
-    if(argc != 6){
+    if(argc != 8){
         printf("引数の数が合いません。（必要数:%d個, 指定された数:%d）\n", 6, argc);
         exit(1);
     }
