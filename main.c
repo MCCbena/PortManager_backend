@@ -56,8 +56,10 @@ int main(int argc, char *argv[]) {
         if(conn!=NULL) {
             int error = refresh(conn);
             if(error==2){
-                mysql_close(conn);
-                conn = getConnection(host, user, password, db, port);
+                if(getConnection(host, user, password, db, port) != NULL) {
+                    mysql_close(conn);
+                    conn = getConnection(host, user, password, db, port);
+                }
             }
             sleep(1);
             if(stop_process) break;
