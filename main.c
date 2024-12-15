@@ -54,7 +54,11 @@ int main(int argc, char *argv[]) {
     while (1) {
         signal(SIGINT, portClose);
         if(conn!=NULL) {
-            refresh(conn);
+            int error = refresh(conn);
+            if(error==2){
+                mysql_close(conn);
+                conn = getConnection(host, user, password, db, port);
+            }
             sleep(1);
             if(stop_process) break;
         } else{
@@ -116,8 +120,6 @@ int refresh(MYSQL *conn){
                     NIC, port_infos[i0].protocol, port_infos[i0].port, port_infos[i0].ipaddress);
             if(system(ip_command)==-1) {
                 printf("コマンドの実行に失敗しました。%s\n", ip_command);
-                mysql_close(conn);
-                conn = getConnection(host, user, password, db, port);
             }
             free(ip_command);
             //配列からポートを削除してfree
