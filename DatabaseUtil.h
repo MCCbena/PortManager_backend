@@ -19,15 +19,15 @@ struct Response_sql{
     MYSQL_RES *response;
 };
 
-MYSQL* getConnection(){
+MYSQL* getConnection(char* host, char* user, char* password, char* db, int port){
     MYSQL* conn = NULL;
     if(!(conn = mysql_init(0))) return NULL;
     if(!mysql_real_connect(conn,
-                          "unknown",
-                          "unknown",
-                          "unknown",
-                          "PORTS",
-                          3306,
+                          host,
+                          user,
+                          password,
+                          db,
+                          port,
                           NULL,0))
         return NULL;
     return conn;

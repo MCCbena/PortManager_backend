@@ -24,10 +24,20 @@ struct PortInfo *port_infos;
 char stop_process = 0; //Ctrl+Cを押したらこれが1になる
 int size = 0;
 
-int main(void) {
+int main(int argc, char *argv[]) {
     printf("connecting...\n");
 
-    MYSQL *conn = getConnection();
+    char* host = argv[1];
+    char* user = argv[2];
+    char* password = argv[3];
+    char* db = argv[4];
+    int port = atoi(argv[5]);
+
+    if(argc != 6){
+        printf("引数の数が合いません。（必要数:%d個, 指定された数:%d）", 6, argc);
+    }
+
+    MYSQL *conn = getConnection(host, user, password, db, port);
     port_infos = calloc(24, 128);
     printf("done!\n");
     while (1) {
