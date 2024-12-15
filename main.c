@@ -33,8 +33,12 @@ int main(int argc, char *argv[]) {
     char* db = argv[4];
     int port = atoi(argv[5]);
 
+    for(int i = 0; i < argc; i++){
+        printf("%s\n", argv[i]);
+    }
     if(argc != 6){
-        printf("引数の数が合いません。（必要数:%d個, 指定された数:%d）", 6, argc);
+        printf("引数の数が合いません。（必要数:%d個, 指定された数:%d）\n", 6, argc);
+        exit(1);
     }
 
     MYSQL *conn = getConnection(host, user, password, db, port);
