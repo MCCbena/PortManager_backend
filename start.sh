@@ -1,3 +1,5 @@
+#!/bin/bash
+
 cd /root/mnt
 cp wg0.conf /etc/wireguard/
 wg-quick up wg0
