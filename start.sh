@@ -11,4 +11,4 @@ db=$4
 port=$5
 
 cd ..
-PortManager_backend $host $user $password $db $port
+./PortManager_backend $host $user $password $db $port
