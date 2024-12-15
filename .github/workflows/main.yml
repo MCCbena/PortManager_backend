@@ -49,4 +49,5 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/mccbena/portmanagerbackend:${{steps.generate-tag-name.outputs.result}}
+          tags: ghcr.io/mccbena/portmanagerbackend:latest
+          platforms: ${{matrix.platform}}
