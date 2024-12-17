@@ -3,7 +3,7 @@ LABEL authors="bena"
 
 RUN apt update
 RUN apt upgrade -y
-RUN apt install iptables libmariadb-dev wireguard iproute2 -y
+RUN apt install iptables ip6tables libmariadb-dev wireguard iproute2 -y
 RUN apt autoremove -y
 COPY build/PortManager_backend /root
 COPY start.sh /root
